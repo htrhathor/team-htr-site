@@ -29,6 +29,13 @@
       width: 400px;
       margin: auto;
     }
+
+    a {
+      color: #9146FF;
+      display: block;
+      margin-top: 10px;
+      text-decoration: none;
+    }
   </style>
 </head>
 
@@ -37,17 +44,15 @@
     <h1>TEAM HTR</h1>
     <p>Portail officiel de la team</p>
     <button onclick="login()">Connexion Twitch</button>
-    <br><br>
     <a href="team.html">Voir la Team HTR</a>
-    <br>
     <a href="dashboard.html">Dashboard Modération</a>
-    <br>
     <a href="admin.html">Admin Panel</a>
   </div>
 
   <script>
     function login() {
-      window.location.href = "https://team-htr-site.htrhathor-pro.workers.dev/login";
+      // redirection vers ton Flask API
+      window.location.href = "https://team-htr-site.onrender.com/login";
     }
   </script>
 </body>
