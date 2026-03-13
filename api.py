@@ -270,6 +270,9 @@ def warn():
 # ======================================
 
 @app.route("/live")
+def live_status():
+    streamer = request.args.get("streamer")
+    # code pour renvoyer JSON {"live": true/false}
 
 def live():
 
@@ -305,4 +308,5 @@ if __name__ == "__main__":
 
     # écoute sur toutes les interfaces pour que ce soit accessible publiquement
     app.run(host="0.0.0.0", port=port)
+
 
