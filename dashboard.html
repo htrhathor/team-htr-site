@@ -48,8 +48,10 @@
   </div>
 
   <script>
+    const API_URL = "https://team-htr-site.onrender.com";
+
     async function loadWarns() {
-      const response = await fetch("https://team-htr-site.htrhathor-pro.workers.dev/stats");
+      const response = await fetch(`${API_URL}/stats`);
       const data = await response.json();
       const table = document.getElementById("warnTable");
       table.innerHTML = "";
@@ -65,7 +67,7 @@
     }
 
     loadWarns();
-    setInterval(loadWarns, 60000); // refresh toutes les minutes
+    setInterval(loadWarns, 60000);
   </script>
 </body>
 
