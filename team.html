@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Team HTR</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+}
+
+.streamer{
+background:#1e293b;
+padding:20px;
+margin:10px;
+border-radius:10px;
+}
+
+.live{
+color:#22c55e;
+font-weight:bold;
+}
+
+.offline{
+color:#ef4444;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>TEAM HTR</h1>
+
+<div id="streamers"></div>
+
+<script>
+
+const streamers = [
+"htr_hathor",
+"htr_shetan313",
+"nalexargz",
+"magnumrgz",
+"htr_white_alex67500"
+]
+
+async function loadStreamers(){
+
+const container = document.getElementById("streamers")
+
+container.innerHTML=""
+
+for(const name of streamers){
+
+const response = await fetch(`http://127.0.0.1:5000/live?streamer=${name}`)
+
+const data = await response.json()
+
+const div = document.createElement("div")
+
+div.className="streamer"
+
+div.innerHTML = `
+<h2>${name}</h2>
+<p class="${data.live ? 'live' : 'offline'}">
+${data.live ? 'LIVE 🔴' : 'OFFLINE'}
+</p>
+<a href="https://twitch.tv/${name}" target="_blank">
+Voir la chaine
+</a>
+`
+
+container.appendChild(div)
+
+}
+
+}
+
+loadStreamers()
+
+</script>
+
+</body>
+
+</html>
