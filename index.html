@@ -1,67 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
+    <meta charset="UTF-8">
+    <title>HTR Team Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: white;
+            text-align: center;
+            margin-top: 100px;
+        }
 
-<title>HTR Team Portal</title>
+        button {
+            background: #9146FF;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
 
-<style>
+        .container {
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 10px;
+            width: 400px;
+            margin: auto;
+        }
 
-body{
-font-family:Arial;
-background:#0f172a;
-color:white;
-text-align:center;
-margin-top:100px;
-}
+        a {
+            color: #9146FF;
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-button{
-background:#9146FF;
-color:white;
-border:none;
-padding:15px 30px;
-font-size:18px;
-cursor:pointer;
-border-radius:8px;
-}
-
-.container{
-background:#1e293b;
-padding:40px;
-border-radius:10px;
-width:400px;
-margin:auto;
-}
-
-</style>
-
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="container">
+    <div class="container">
 
-<h1>TEAM HTR</h1>
+        <h1>TEAM HTR</h1>
+        <p>Portail officiel de la team</p>
 
-<p>Portail officiel de la team</p>
+        <!-- Bouton connexion Twitch -->
+        <button onclick="login()">Connexion Twitch</button>
 
-<button onclick="login()">Connexion Twitch</button>
+        <br><br>
 
-<br><br>
+        <!-- Liens internes -->
+        <a href="/team">Voir la Team HTR</a> | 
+        <a href="/dashboard">Dashboard Modération</a> | 
+        <a href="/admin">Panel Admin</a>
 
-<a href="team.html">Voir la Team HTR</a>
+    </div>
 
-</div>
-
-<script>
-
-function login(){
-
-window.location.href = "https://team-htr-site.onrender.com/login"
-
-}
-
-</script>
+    <script>
+        function login() {
+            // Redirige vers la route /login de ton API Flask
+            window.location.href = "/login";
+        }
+    </script>
 
 </body>
 
