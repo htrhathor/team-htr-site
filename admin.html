@@ -2,48 +2,38 @@
 <html>
 
 <head>
-
 <title>HTR Admin Panel</title>
-
 <style>
-
-body{
-font-family:Arial;
-background:#0f172a;
-color:white;
-text-align:center;
+body {
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+    text-align: center;
 }
-
-table{
-margin:auto;
-border-collapse:collapse;
-width:80%;
+table {
+    margin: auto;
+    border-collapse: collapse;
+    width: 80%;
 }
-
-th,td{
-padding:10px;
-border-bottom:1px solid #334155;
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #334155;
 }
-
-th{
-background:#1e293b;
+th {
+    background: #1e293b;
 }
-
-button{
-padding:5px 10px;
-background:#9146FF;
-border:none;
-color:white;
-cursor:pointer;
-border-radius:5px;
+button {
+    padding: 5px 10px;
+    background: #9146FF;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
 }
-
-.container{
-margin-top:40px;
+.container {
+    margin-top: 40px;
 }
-
 </style>
-
 </head>
 
 <body>
@@ -51,11 +41,8 @@ margin-top:40px;
 <h1>HTR ADMIN PANEL</h1>
 
 <div class="container">
-
 <table>
-
 <thead>
-
 <tr>
 <th>User</th>
 <th>Viewer</th>
@@ -64,76 +51,54 @@ margin-top:40px;
 <th>Owner</th>
 <th>Update</th>
 </tr>
-
 </thead>
-
-<tbody id="usersTable">
-
-</tbody>
-
+<tbody id="usersTable"></tbody>
 </table>
-
 </div>
 
 <script>
+const API_URL = "https://team-htr-site.onrender.com"; // URL publique Render
 
-async function loadUsers(){
+async function loadUsers() {
+    try {
+        const response = await fetch(`${API_URL}/users`);
+        const data = await response.json();
+        const table = document.getElementById("usersTable");
+        table.innerHTML = "";
 
-const response = await fetch("https://team-htr-site.onrender.com/users")
-
-const data = await response.json()
-
-const table = document.getElementById("usersTable")
-
-table.innerHTML=""
-
-data.forEach(user => {
-
-const row = document.createElement("tr")
-
-row.innerHTML = `
-
-<td>${user.username}</td>
-
-<td><input type="checkbox" ${user.viewer ? "checked" : ""} id="viewer_${user.username}"></td>
-
-<td><input type="checkbox" ${user.channel ? "checked" : ""} id="channel_${user.username}"></td>
-
-<td><input type="checkbox" ${user.streamer ? "checked" : ""} id="streamer_${user.username}"></td>
-
-<td><input type="checkbox" ${user.owner ? "checked" : ""} id="owner_${user.username}"></td>
-
-<td>
-<button onclick="updateUser('${user.username}')">Save</button>
-</td>
-
-`
-
-table.appendChild(row)
-
-})
-
+        data.forEach(user => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${user.username}</td>
+                <td><input type="checkbox" ${user.viewer ? "checked" : ""} id="viewer_${user.username}"></td>
+                <td><input type="checkbox" ${user.channel ? "checked" : ""} id="channel_${user.username}"></td>
+                <td><input type="checkbox" ${user.streamer ? "checked" : ""} id="streamer_${user.username}"></td>
+                <td><input type="checkbox" ${user.owner ? "checked" : ""} id="owner_${user.username}"></td>
+                <td><button onclick="updateUser('${user.username}')">Save</button></td>
+            `;
+            table.appendChild(row);
+        });
+    } catch (err) {
+        console.error("Erreur lors du chargement des utilisateurs :", err);
+    }
 }
 
-async function updateUser(username){
+async function updateUser(username) {
+    const viewer = document.getElementById(`viewer_${username}`).checked ? 1 : 0;
+    const channel = document.getElementById(`channel_${username}`).checked ? 1 : 0;
+    const streamer = document.getElementById(`streamer_${username}`).checked ? 1 : 0;
+    const owner = document.getElementById(`owner_${username}`).checked ? 1 : 0;
 
-const viewer = document.getElementById("viewer_"+username).checked ? 1 : 0
-const channel = document.getElementById("channel_"+username).checked ? 1 : 0
-const streamer = document.getElementById("streamer_"+username).checked ? 1 : 0
-const owner = document.getElementById("owner_"+username).checked ? 1 : 0
-
-const url = `http://localhost:5000/setrole?admin=bothtr&user=${username}&viewer=${viewer}&channel=${channel}&streamer=${streamer}&owner=${owner}`
-
-await fetch(url)
-
-loadUsers()
-
+    try {
+        await fetch(`${API_URL}/setrole?user=${username}&viewer=${viewer}&channel=${channel}&streamer=${streamer}&owner=${owner}`);
+        loadUsers();
+    } catch (err) {
+        console.error("Erreur lors de la mise à jour :", err);
+    }
 }
 
-loadUsers()
-
+loadUsers();
 </script>
 
 </body>
-
 </html>
