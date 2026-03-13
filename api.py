@@ -190,17 +190,15 @@ def stats():
 @app.route("/live")
 def live_status():
     streamer = request.args.get("streamer")
-    if not streamer:
-        return jsonify({"error": "No streamer specified"}), 400
-
     token = get_token()
     url = f"https://api.twitch.tv/helix/streams?user_login={streamer}"
-    headers = {"Client-ID": CLIENT_ID, "Authorization": f"Bearer {token}"}
+    headers = {
+        "Client-ID": CLIENT_ID,
+        "Authorization": f"Bearer {token}"
+    }
     r = requests.get(url, headers=headers)
-    r.raise_for_status()
     data = r.json().get("data", [])
     return jsonify({"live": len(data) > 0})
-
 # ======================================
 # SERVER START
 # ======================================
@@ -208,6 +206,7 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     print(f"API HTR démarrée sur le port {port}")
     app.run(host="0.0.0.0", port=port)
+
 
 
 
