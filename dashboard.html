@@ -2,39 +2,30 @@
 <html>
 
 <head>
-
 <title>HTR Dashboard</title>
-
 <style>
-
-body{
-font-family:Arial;
-background:#0f172a;
-color:white;
-text-align:center;
+body {
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+    text-align: center;
 }
-
-table{
-margin:auto;
-border-collapse:collapse;
-width:60%;
+table {
+    margin: auto;
+    border-collapse: collapse;
+    width: 60%;
 }
-
-th,td{
-padding:10px;
-border-bottom:1px solid #334155;
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #334155;
 }
-
-th{
-background:#1e293b;
+th {
+    background: #1e293b;
 }
-
-.container{
-margin-top:50px;
+.container {
+    margin-top: 50px;
 }
-
 </style>
-
 </head>
 
 <body>
@@ -42,57 +33,45 @@ margin-top:50px;
 <h1>Dashboard Modération HTR</h1>
 
 <div class="container">
-
 <table>
-
 <thead>
-
 <tr>
 <th>Viewer</th>
 <th>Warns</th>
 </tr>
-
 </thead>
-
-<tbody id="warnTable">
-
-</tbody>
-
+<tbody id="warnTable"></tbody>
 </table>
-
 </div>
 
 <script>
+const API_URL = "https://team-htr-site.onrender.com"; // URL publique Render
 
-async function loadWarns(){
+async function loadWarns() {
+    try {
+        const response = await fetch(`${API_URL}/stats`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        const table = document.getElementById("warnTable");
+        table.innerHTML = "";
 
-const response = await fetch("https://team-htr-site.onrender.com/stats")
-
-const data = await response.json()
-
-const table = document.getElementById("warnTable")
-
-table.innerHTML=""
-
-data.forEach(user => {
-
-const row = document.createElement("tr")
-
-row.innerHTML = `
-<td>${user.viewer}</td>
-<td>${user.warns}</td>
-`
-
-table.appendChild(row)
-
-})
-
+        data.forEach(user => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${user.viewer}</td>
+                <td>${user.warns}</td>
+            `;
+            table.appendChild(row);
+        });
+    } catch (err) {
+        console.error("Erreur lors du chargement des warns :", err);
+    }
 }
 
-loadWarns()
-
+loadWarns();
 </script>
 
 </body>
-
 </html>
