@@ -2,91 +2,104 @@
 <html>
 
 <head>
+  <title>Team HTR</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      text-align: center;
+    }
 
-<title>Team HTR</title>
+    .streamer {
+      background: #1e293b;
+      padding: 20px;
+      margin: 10px auto;
+      border-radius: 10px;
+      width: 300px;
+      display: inline-block;
+      vertical-align: top;
+    }
 
-<style>
+    .live {
+      color: #22c55e;
+      font-weight: bold;
+    }
 
-body{
-font-family:Arial;
-background:#0f172a;
-color:white;
-text-align:center;
-}
+    .offline {
+      color: #ef4444;
+    }
 
-.streamer{
-background:#1e293b;
-padding:20px;
-margin:10px;
-border-radius:10px;
-}
+    img.thumbnail {
+      width: 100%;
+      border-radius: 5px;
+      margin-bottom: 10px;
+    }
 
-.live{
-color:#22c55e;
-font-weight:bold;
-}
-
-.offline{
-color:#ef4444;
-}
-
-</style>
-
+    a {
+      color: #9146FF;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
 </head>
 
 <body>
+  <h1>TEAM HTR</h1>
+  <div id="streamers"></div>
 
-<h1>TEAM HTR</h1>
+  <script>
+    const streamers = [
+      "htr_hathor",
+      "htr_shetan313",
+      "nalexargz",
+      "magnumrgz",
+      "htr_white_alex67500"
+    ];
 
-<div id="streamers"></div>
+    const API_URL = "https://team-htr-site.onrender.com"; // <-- ton API Render
 
-<script>
+    async function loadStreamers() {
+      const container = document.getElementById("streamers");
+      container.innerHTML = "";
 
-const streamers = [
-"htr_hathor",
-"htr_shetan313",
-"nalexargz",
-"magnumrgz",
-"htr_white_alex67500"
-]
+      for (const name of streamers) {
+        try {
+          const response = await fetch(`${API_URL}/live?streamer=${name}`);
+          const data = await response.json();
 
-async function loadStreamers(){
+          let title = "";
+          let game = "";
+          let thumbnail = "";
 
-const container = document.getElementById("streamers")
+          if (data.live) {
+            title = data.title || "Pas de titre";
+            game = data.game_name || "Pas de jeu";
+            thumbnail = data.thumbnail_url ? data.thumbnail_url.replace("{width}", "300").replace("{height}", "170") : "";
+          }
 
-container.innerHTML=""
+          const div = document.createElement("div");
+          div.className = "streamer";
 
-for(const name of streamers){
+          div.innerHTML = `
+            <h2>${name}</h2>
+            ${data.live && thumbnail ? `<img src="${thumbnail}" class="thumbnail">` : ""}
+            <p class="${data.live ? 'live' : 'offline'}">
+              ${data.live ? 'LIVE 🔴' : 'OFFLINE'}
+            </p>
+            ${data.live ? `<p><strong>${title}</strong></p><p>${game}</p>` : ""}
+            <a href="https://twitch.tv/${name}" target="_blank">Voir la chaîne</a>
+          `;
 
-const API_URL = "https://team-htr-site.onrender.com"; // <-- ton API Render
-const response = await fetch(`${API_URL}/live?streamer=${name}`);
+          container.appendChild(div);
+        } catch (err) {
+          console.error(`Erreur pour ${name}:`, err);
+        }
+      }
+    }
 
-const data = await response.json()
-
-const div = document.createElement("div")
-
-div.className="streamer"
-
-div.innerHTML = `
-<h2>${name}</h2>
-<p class="${data.live ? 'live' : 'offline'}">
-${data.live ? 'LIVE 🔴' : 'OFFLINE'}
-</p>
-<a href="https://twitch.tv/${name}" target="_blank">
-Voir la chaine
-</a>
-`
-
-container.appendChild(div)
-
-}
-
-}
-
-loadStreamers()
-
-</script>
-
+    loadStreamers();
+    setInterval(loadStreamers, 60000); // actualise toutes les minutes
+  </script>
 </body>
-
 </html>
