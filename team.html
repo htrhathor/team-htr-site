@@ -14,10 +14,10 @@
     .streamer {
       background: #1e293b;
       padding: 20px;
-      margin: 10px auto;
+      margin: 10px;
       border-radius: 10px;
-      width: 300px;
       display: inline-block;
+      width: 250px;
       vertical-align: top;
     }
 
@@ -57,7 +57,7 @@
       "htr_white_alex67500"
     ];
 
-    const API_URL = "https://team-htr-site.onrender.com"; // ton API Render public
+    const API_URL = "https://team-htr-site.htrhathor-pro.workers.dev";
 
     async function loadStreamers() {
       const container = document.getElementById("streamers");
@@ -68,15 +68,9 @@
           const response = await fetch(`${API_URL}/live?streamer=${name}`);
           const data = await response.json();
 
-          let title = "";
-          let game = "";
-          let thumbnail = "";
-
-          if (data.live) {
-            title = data.title || "Pas de titre";
-            game = data.game_name || "Pas de jeu";
-            thumbnail = data.thumbnail_url ? data.thumbnail_url.replace("{width}", "300").replace("{height}", "170") : "";
-          }
+          let title = data.title || "";
+          let game = data.game_name || "";
+          let thumbnail = data.thumbnail_url ? data.thumbnail_url.replace("{width}", "250").replace("{height}", "140") : "";
 
           const div = document.createElement("div");
           div.className = "streamer";
@@ -102,4 +96,5 @@
     setInterval(loadStreamers, 60000); // actualise toutes les minutes
   </script>
 </body>
+
 </html>
