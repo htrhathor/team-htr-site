@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>HTR Dashboard</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+}
+
+table{
+margin:auto;
+border-collapse:collapse;
+width:60%;
+}
+
+th,td{
+padding:10px;
+border-bottom:1px solid #334155;
+}
+
+th{
+background:#1e293b;
+}
+
+.container{
+margin-top:50px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Dashboard Modération HTR</h1>
+
+<div class="container">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Viewer</th>
+<th>Warns</th>
+</tr>
+
+</thead>
+
+<tbody id="warnTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+async function loadWarns(){
+
+const response = await fetch("http://localhost:5000/stats")
+
+const data = await response.json()
+
+const table = document.getElementById("warnTable")
+
+table.innerHTML=""
+
+data.forEach(user => {
+
+const row = document.createElement("tr")
+
+row.innerHTML = `
+<td>${user.viewer}</td>
+<td>${user.warns}</td>
+`
+
+table.appendChild(row)
+
+})
+
+}
+
+loadWarns()
+
+</script>
+
+</body>
+
+</html>
